@@ -1,0 +1,7 @@
+// validation, test
+// logics and bug fix
+
+// seperate env for localhost with test db, staging with remote_test_db, production_with_actual_db. 
+
+// user create student, teacher test.
+// class and subject to teacher via schedule .

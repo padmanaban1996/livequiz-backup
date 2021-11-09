@@ -1,0 +1,7 @@
+.env
+.env.production
+.env.development
+node_modules/
+service/uploads
+dist/
+ssl/
