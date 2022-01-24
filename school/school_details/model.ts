@@ -1,4 +1,5 @@
 
+import { string } from 'joi';
 import mongoose from 'mongoose';
 
 export interface ISchoolEachClass {
@@ -52,6 +53,7 @@ export interface Isubject{
 
 export interface IschoolDetails {
     name: string,
+    email:string,
     classes: ISchoolEachClass[],
     logoUrl: string,
     admins: ISchoolAdmins[],
@@ -71,6 +73,7 @@ export interface IschoolDetails {
 
 const SchoolDetailSchema = new mongoose.Schema({
     name: String,
+    email:String,
     classes: {
         type: [{
             _id: String,

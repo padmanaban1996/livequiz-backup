@@ -2,7 +2,7 @@ import express from 'express';
 import { upload } from '../service/upload';
 import { createEachClass, getAllClass, getOneClassDetailsById, updateClassById } from './class/controller';
 import { createSubject, getAllSubject, uploadLogo } from './controller';
-import { createSchoolDetails, getAllSchoolDetails, getSingleSchoolDetails } from './school_details/controller';
+import { createSchoolDetails, deleteSchoolDetails, getAllSchoolDetails, getSingleSchoolDetails, updateSchoolDetails } from './school_details/controller';
 
 
 export const schoolRouter = express.Router();
@@ -11,6 +11,8 @@ export const schoolRouter = express.Router();
 schoolRouter.post('/', createSchoolDetails)
 schoolRouter.get('/', getAllSchoolDetails)
 schoolRouter.get('/:id', getSingleSchoolDetails)
+schoolRouter.delete('/deleteSchool/:id', deleteSchoolDetails);
+schoolRouter.put('/updateSchool/:id', updateSchoolDetails)
 schoolRouter.post('/upload/school/logo/:id', upload.single("uploadLogo"), uploadLogo)
 
 // class

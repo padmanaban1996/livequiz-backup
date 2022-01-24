@@ -3,31 +3,67 @@ import { json, Request, Response } from 'express';
 import statuscode from 'http-status-codes';
 import { SchoolDetail } from './model';
 
+// export async function createSchoolDetails(req: Request, res: Response) {
+//     try {
+//         const { name,email,classes, phone_number, address, admins,
+//             departments,
+//             subjects,
+//             logoUrl,
+//             contact_person,
+//             subscription,
+//             account_manager,
+//             subscriptionPlan,
+//             pincode
+//         } = req.body;
+//         await SchoolDetail.find({ name, pincode }).then(data => {
+//             if (data.length > 0) {
+//                 res.status(statuscode.BAD_REQUEST).json({ msg: "school already exist" });
+//             }
+//         })
+
+//         const schoolDetails = await SchoolDetail.create({ name,email, logoUrl, classes, subscriptionPlan, phone_number, address, admins, departments, subjects, contact_person, subscription, account_manager, pincode });
+//         res.status(statuscode.OK).json(schoolDetails);
+
+
+
+//     } catch (error) {
+//         res.status(statuscode.INTERNAL_SERVER_ERROR).json(error)
+//     }
+// }
+
 export async function createSchoolDetails(req: Request, res: Response) {
-    try {
-        const { name, classes, phone_number, address, admins,
-            departments,
-            subjects,
-            logoUrl,
-            contact_person,
-            subscription,
-            account_manager,
-            subscriptionPlan,
-            pincode
-        } = req.body;
-        await SchoolDetail.find({ name, pincode }).then(data => {
+    try{
+    const { name,email,classes, phone_number, address, admins,
+                    departments,
+                    subjects,
+                    logoUrl,
+                    contact_person,
+                    subscription,
+                    account_manager,
+                    subscriptionPlan,
+                    pincode
+                } = req.body;
+        console.log(name, email, phone_number)
+
+        await SchoolDetail.find({ name, pincode }).then(async (data) => {
             if (data.length > 0) {
-                res.status(statuscode.BAD_REQUEST).json({ msg: "school already exist" });
+                res.status(statuscode.BAD_REQUEST).send({ msg: "School already exist" });
+            } else {
+                console.log("entered school Create")
+                const schoolDetails = await SchoolDetail.create({ name,email, logoUrl, classes,
+                     subscriptionPlan, phone_number, address, admins, departments,
+                      subjects, contact_person, subscription, account_manager, pincode })
+                        .then(detail => {
+                    if (detail) {
+                        res.status(statuscode.OK).json(detail);
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
             }
         })
-
-        const schoolDetails = await SchoolDetail.create({ name, logoUrl, classes, subscriptionPlan, phone_number, address, admins, departments, subjects, contact_person, subscription, account_manager, pincode });
-        res.status(statuscode.OK).json(schoolDetails);
-
-
-
     } catch (error) {
-        res.status(statuscode.INTERNAL_SERVER_ERROR).json(error)
+        res.status(statuscode.INTERNAL_SERVER_ERROR).send({ msg: "Internal server error" })
     }
 }
 
@@ -66,7 +102,7 @@ export async function getSingleSchoolDetails(req: Request, res: Response) {
     }
 }
 
-export async function deleteQuestion(req: Request, res: Response) {
+export async function deleteSchoolDetails(req: Request, res: Response) {
     const id = req.params.id;
     SchoolDetail.findByIdAndRemove(id)
         .then(data => {
@@ -83,6 +119,26 @@ export async function deleteQuestion(req: Request, res: Response) {
         .catch(err => {
             res.status(500).send({
                 message: "Could not delete School Detail."
+            });
+        });
+}
+
+export async function updateSchoolDetails(req: Request, res: Response) {
+
+    const id = req.params.id;
+    SchoolDetail.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update Institution. Maybe Details was not found!`
+                });
+            } else {
+                res.send({ message: "Institution Details was updated successfully." });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating Institution."
             });
         });
 }
